@@ -1,0 +1,1660 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF7F2;
+    --warm-tan: #E8DDD0;
+    --warm-mid: #C9B9A8;
+    --warm-text: #7A6858;
+    --ink: #2C2420;
+    --ink-soft: #5C4A3F;
+    --accent: #B8956A;
+    --accent-light: #EDE0D0;
+    --rose: #D4907A;
+    --sage: #8FA68E;
+    --sky: #7EA8C4;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  .app {
+    max-width: 420px;
+    margin: 0 auto;
+    background: var(--cream);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 0;
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    z-index: 10;
+  }
+  .nav-logo {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); font-style: italic; }
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--warm-tan);
+    border-radius: 20px;
+    padding: 3px;
+  }
+  .nav-tab {
+    padding: 5px 14px;
+    border-radius: 17px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--warm-text);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    transition: all 0.2s;
+  }
+  .nav-tab.active {
+    background: white;
+    color: var(--ink);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+
+  /* PAGES */
+  .page { display: none; animation: fadeIn 0.25s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* =================== LIBRARY PAGE =================== */
+  .section-header {
+    padding: 20px 20px 10px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--warm-text);
+  }
+
+  .year-chip {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin: 0 20px 12px;
+  }
+
+  .cards-grid {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .event-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(44,36,32,0.07);
+  }
+  .event-card:active { transform: scale(0.98); }
+
+  .card-cover {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-cover-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 100%;
+    gap: 2px;
+  }
+  .cover-img {
+    background-size: cover;
+    background-position: center;
+  }
+  .cover-main { grid-row: 1 / 3; }
+  .card-cover-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(4px);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .card-body { padding: 12px 14px 14px; }
+  .card-meta { font-size: 11px; color: var(--warm-text); margin-bottom: 4px; }
+  .card-title { font-family: var(--font-serif); font-size: 17px; color: var(--ink); margin-bottom: 8px; line-height: 1.2; }
+  .card-cast {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    border: 2px solid white;
+    margin-left: -6px;
+    flex-shrink: 0;
+  }
+  .avatar:first-child { margin-left: 0; }
+  .cast-label { font-size: 11px; color: var(--warm-text); margin-left: 4px; }
+
+  /* FEATURED CARD */
+  .event-card.featured .card-cover { height: 220px; }
+  .event-card.featured .card-title { font-size: 20px; }
+  .featured-ribbon {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    margin: 0 20px 20px;
+    gap: 8px;
+  }
+  .stat-pill {
+    flex: 1;
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: none;
+    font-family: var(--font-sans);
+  }
+  .stat-pill:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(44,36,32,0.1); }
+  .stat-pill:active { transform: scale(0.97); }
+  .stat-num { font-size: 18px; font-weight: 500; color: var(--ink); display: block; }
+  .stat-lbl { font-size: 10px; color: var(--warm-text); }
+
+  /* =================== SUB LIST PAGES =================== */
+  .subpage-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px 10px;
+  }
+  .subpage-back {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--warm-tan); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px; color: var(--ink); flex-shrink: 0;
+  }
+  .subpage-title {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .subpage-count {
+    font-size: 11px;
+    color: var(--warm-text);
+    margin-left: auto;
+  }
+
+  /* 全部照片 — 方格网格 */
+  .photos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 80px;
+  }
+  .photos-grid-item {
+    aspect-ratio: 1;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--warm-tan);
+  }
+
+  /* 全部事件 — 紧凑列表 */
+  .events-list {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 80px;
+  }
+  .event-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(44,36,32,0.06);
+    transition: transform 0.15s;
+  }
+  .event-row:active { transform: scale(0.98); }
+  .event-row-thumb {
+    width: 52px; height: 52px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--warm-tan);
+    flex-shrink: 0;
+  }
+  .event-row-info { flex: 1; min-width: 0; }
+  .event-row-title { font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .event-row-meta { font-size: 11px; color: var(--warm-text); margin-top: 2px; }
+  .event-row-count { font-size: 11px; color: var(--warm-text); flex-shrink: 0; }
+
+  /* 全部手账 — 2列卡片 */
+  .journals-grid {
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 80px;
+  }
+  .journal-card {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 1px 6px rgba(44,36,32,0.07);
+    transition: transform 0.15s;
+  }
+  .journal-card:active { transform: scale(0.97); }
+  .journal-card-cover {
+    height: 110px;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--warm-tan);
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+  }
+  .journal-card-style {
+    background: rgba(255,255,255,0.85);
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .journal-card-body { padding: 8px 10px 10px; }
+  .journal-card-title { font-family: var(--font-serif); font-size: 13px; color: var(--ink); line-height: 1.3; }
+  .journal-card-meta { font-size: 10px; color: var(--warm-text); margin-top: 3px; }
+
+  /* =================== DETAIL PAGE =================== */
+  .detail-hero {
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+  }
+  .detail-hero-bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.85);
+    transform: scale(1.03);
+  }
+  .detail-back {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    color: var(--ink);
+  }
+  .detail-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 20px 16px;
+    background: linear-gradient(to top, rgba(44,36,32,0.7) 0%, transparent 100%);
+  }
+  .detail-date { font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 4px; }
+  .detail-title { font-family: var(--font-serif); font-size: 26px; color: white; line-height: 1.1; }
+
+  .detail-body { padding: 16px 20px; }
+
+  .cast-section { margin-bottom: 20px; }
+  .cast-section-label { font-size: 11px; color: var(--warm-text); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .cast-row { display: flex; gap: 14px; }
+  .cast-person { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+  .cast-avatar-lg {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.15s;
+  }
+  .cast-avatar-lg:active { transform: scale(0.93); }
+  .cast-name { font-size: 11px; color: var(--ink-soft); }
+
+  .photos-section { margin-bottom: 20px; }
+  .photos-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .photos-label { font-size: 11px; color: var(--warm-text); text-transform: uppercase; letter-spacing: 0.8px; }
+  .photos-edit-btn {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 0;
+  }
+  .photos-mosaic {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .photo-thumb {
+    aspect-ratio: 1;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    position: relative;
+  }
+  .photo-thumb:first-child {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    aspect-ratio: auto;
+    min-height: 120px;
+  }
+  .photo-thumb:hover { opacity: 0.88; }
+  .photo-more {
+    background: rgba(44,36,32,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  /* 删除角标 */
+  .photo-del {
+    display: none;
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 18px; height: 18px;
+    background: rgba(44,36,32,0.75);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    line-height: 1;
+  }
+  .edit-mode .photo-thumb .photo-del { display: flex; }
+  .edit-mode .photo-thumb { animation: wiggle 0.25s ease; }
+  @keyframes wiggle { 0%,100%{transform:rotate(0deg)} 25%{transform:rotate(-1.5deg)} 75%{transform:rotate(1.5deg)} }
+
+  /* 添加照片按钮 */
+  .add-photo-btn {
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border: 1.5px dashed var(--accent);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s;
+  }
+  .add-photo-btn:hover { background: var(--warm-tan); }
+  .edit-mode .add-photo-btn { display: block; }
+
+  /* 照片选择器弹层 */
+  .picker-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(44,36,32,0.5);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .picker-overlay.open { display: flex; animation: slideUp 0.25s ease; }
+  @keyframes slideUp { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .picker-sheet {
+    width: 100%;
+    max-width: 420px;
+    background: var(--cream);
+    border-radius: 20px 20px 0 0;
+    padding: 0 0 24px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 0.5px solid var(--warm-tan);
+  }
+  .picker-title { font-family: var(--font-serif); font-size: 18px; }
+  .picker-confirm {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .picker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    overflow-y: auto;
+    padding: 2px;
+  }
+  .picker-item {
+    aspect-ratio: 1;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--warm-tan);
+    position: relative;
+    cursor: pointer;
+  }
+  .picker-item.selected::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    background: rgba(184,149,106,0.55);
+    color: white;
+    font-size: 22px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .picker-cancel {
+    margin: 10px 20px 0;
+    width: calc(100% - 40px);
+    padding: 12px;
+    background: var(--warm-tan);
+    color: var(--ink);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .scrapbook-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--ink);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-serif);
+    font-size: 17px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+    margin-bottom: 10px;
+  }
+  .scrapbook-btn:hover { background: var(--ink-soft); }
+
+  .export-row { display: flex; gap: 8px; }
+  .export-btn {
+    flex: 1;
+    padding: 10px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .export-btn:hover { background: var(--warm-tan); }
+
+  /* =================== EDITOR PAGE =================== */
+  .editor-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+    border-bottom: 1px solid var(--warm-tan);
+    position: sticky; top: 0;
+    background: var(--cream);
+    z-index: 5;
+  }
+  .editor-back {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--warm-tan); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px; color: var(--ink);
+  }
+  .editor-title { flex: 1; font-family: var(--font-serif); font-size: 18px; }
+  .editor-save {
+    background: var(--accent); color: white; border: none;
+    border-radius: 20px; padding: 6px 16px;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+  }
+
+  .templates-row {
+    padding: 14px 20px; display: flex; gap: 8px; overflow-x: auto;
+  }
+  .template-chip {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 500; cursor: pointer;
+    border: 1.5px solid var(--warm-tan); color: var(--warm-text);
+    background: white; transition: all 0.15s;
+  }
+  .template-chip.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+  /* 编辑器画布 — 每个元素可点击高亮 */
+  .canvas-preview {
+    margin: 0 20px; border-radius: var(--radius);
+    overflow: hidden; box-shadow: 0 4px 20px rgba(44,36,32,0.12);
+  }
+  .canvas-hint { text-align: center; padding: 10px; font-size: 11px; color: var(--warm-text); margin-bottom: 16px; }
+
+  /* 可编辑元素点击高亮 */
+  .editable-el {
+    cursor: pointer; position: relative; transition: outline 0.1s;
+  }
+  .editable-el:hover { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .editable-el.selected { outline: 2.5px solid var(--accent); outline-offset: 2px; }
+
+  /* 元素操作浮层 */
+  .el-toolbar {
+    display: none;
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); border-radius: 20px;
+    padding: 8px 4px; gap: 2px;
+    z-index: 50; white-space: nowrap;
+  }
+  .el-toolbar.visible { display: flex; animation: fadeIn 0.15s ease; }
+  .el-toolbar-btn {
+    background: none; border: none; color: white;
+    font-size: 11px; font-weight: 500; padding: 5px 12px;
+    cursor: pointer; border-radius: 14px; transition: background 0.15s;
+  }
+  .el-toolbar-btn:hover { background: rgba(255,255,255,0.15); }
+  .el-toolbar-sep { width: 0.5px; background: rgba(255,255,255,0.25); margin: 4px 0; }
+
+  /* 模板内部各类型 */
+  .template-film {
+    background: #1A1410; padding: 24px 16px;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .film-hole-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .film-hole { width: 12px; height: 8px; background: #F0E8D8; border-radius: 2px; opacity: 0.7; }
+  .film-photo {
+    width: 100%; height: 160px;
+    background-size: cover; background-position: center; border-radius: 4px;
+  }
+  .film-caption {
+    color: #F0E8D8; font-family: var(--font-serif); font-size: 13px;
+    text-align: center; padding: 8px 0 4px; opacity: 0.85;
+  }
+  .template-journal { background: #FBF8F3; padding: 24px 20px; min-height: 340px; }
+  .journal-date {
+    font-size: 10px; color: #B8A090; text-transform: uppercase;
+    letter-spacing: 1.5px; margin-bottom: 10px;
+    border-bottom: 1px solid #E8DDD0; padding-bottom: 8px;
+  }
+  .journal-title { font-family: var(--font-serif); font-size: 22px; color: var(--ink); margin-bottom: 12px; font-style: italic; }
+  .journal-img {
+    height: 140px; background-size: cover; background-position: center;
+    border-radius: 8px; margin-bottom: 12px;
+    float: right; width: 48%; margin-left: 12px;
+  }
+  .journal-text { font-size: 12px; color: var(--ink-soft); line-height: 1.8; }
+  .journal-sticker { display: inline-block; font-size: 18px; transform: rotate(-8deg); margin-right: 4px; }
+  .template-polaroid { background: #E8E0D5; padding: 20px; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .polaroid-frame { background: white; padding: 10px 10px 28px; box-shadow: 0 3px 12px rgba(0,0,0,0.15); transform: rotate(-2deg); width: 80%; }
+  .polaroid-frame:nth-child(2) { transform: rotate(1.5deg); align-self: flex-end; width: 65%; }
+  .polaroid-img { width: 100%; height: 120px; background-size: cover; background-position: center; }
+  .polaroid-label { font-family: var(--font-serif); font-size: 13px; color: var(--ink-soft); text-align: center; padding-top: 8px; }
+
+  /* =================== 手账预览页 =================== */
+  /* 通用头部 */
+  .preview-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; position: sticky; top: 0;
+    background: var(--cream); z-index: 5;
+    border-bottom: 0.5px solid var(--warm-tan);
+  }
+  .preview-back {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--warm-tan); border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px; color: var(--ink);
+  }
+  .preview-title { flex: 1; font-family: var(--font-serif); font-size: 18px; }
+  .preview-edit-btn {
+    background: var(--accent-light); color: var(--accent);
+    border: none; border-radius: 20px; padding: 6px 14px;
+    font-size: 12px; font-weight: 500; cursor: pointer;
+  }
+
+  /* ── 翻页册模式（胶卷/拍立得） ── */
+  .book-viewport {
+    overflow: hidden; position: relative;
+    margin: 0 20px 16px; border-radius: var(--radius);
+    box-shadow: 0 6px 28px rgba(44,36,32,0.14);
+  }
+  .book-pages {
+    display: flex; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .book-page {
+    min-width: 100%; box-sizing: border-box;
+  }
+  .book-nav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; padding: 0 20px 20px;
+  }
+  .book-nav-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: white; border: 0.5px solid var(--warm-tan);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: var(--ink);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); transition: background 0.15s;
+  }
+  .book-nav-btn:hover { background: var(--accent-light); }
+  .book-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .book-dots { display: flex; gap: 6px; }
+  .book-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--warm-tan); transition: background 0.2s, transform 0.2s;
+  }
+  .book-dot.active { background: var(--accent); transform: scale(1.3); }
+
+  /* ── 长图滚动模式（日记本/极简白） ── */
+  .scroll-preview {
+    padding: 0 20px 80px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .scroll-page {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 3px 14px rgba(44,36,32,0.1);
+    cursor: pointer; transition: transform 0.15s;
+  }
+  .scroll-page:hover { transform: translateY(-2px); }
+  .scroll-page-num {
+    font-size: 10px; color: var(--warm-text);
+    text-align: center; padding: 6px 0 2px;
+  }
+
+  /* AI TOAST */
+  .ai-toast {
+    margin: 0 20px 14px;
+    background: var(--accent-light);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .ai-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 1.5s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  .ai-text { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    display: flex;
+    padding: 10px 20px 20px;
+    gap: 0;
+    background: var(--cream);
+    border-top: 1px solid var(--warm-tan);
+    position: sticky;
+    bottom: 0;
+  }
+  .bottom-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--warm-text);
+    padding: 6px 0;
+  }
+  .bottom-btn.active { color: var(--accent); }
+  .bottom-icon { font-size: 20px; line-height: 1; }
+  .bottom-label { font-size: 9px; font-weight: 500; }
+</style>
+
+<div class="app">
+  <div class="nav">
+    <div class="nav-logo">mem<span>oir</span></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-page="library" onclick="showPage('library')">时光</button>
+      <button class="nav-tab" data-page="all-events" onclick="showPage('all-events')">事件</button>
+      <button class="nav-tab" data-page="all-journals" onclick="showPage('all-journals')">手账</button>
+    </div>
+  </div>
+
+  <!-- LIBRARY PAGE -->
+  <div class="page active" id="page-library">
+    <div class="section-header">
+      <div>
+        <div class="section-title">我的故事</div>
+        <div class="section-sub">AI 已整理 47 个事件</div>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <button class="stat-pill" onclick="showPage('all-photos')"><span class="stat-num">2,847</span><span class="stat-lbl">张照片</span></button>
+      <button class="stat-pill" onclick="showPage('all-events')"><span class="stat-num">47</span><span class="stat-lbl">个事件</span></button>
+      <button class="stat-pill" onclick="showPage('all-journals')"><span class="stat-num">6</span><span class="stat-lbl">本手账</span></button>
+    </div>
+
+    <div class="ai-toast">
+      <div class="ai-dot"></div>
+      <div class="ai-text">AI 发现了新故事：「三月的京都」，共 84 张照片</div>
+    </div>
+
+    <span class="year-chip">2025</span>
+
+    <div class="cards-grid">
+
+      <!-- FEATURED -->
+      <div class="event-card featured" onclick="showPage('detail')">
+        <div class="card-cover">
+          <div class="card-cover-grid">
+            <div class="cover-img cover-main" style="background-image: url('https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=400&q=80')"></div>
+            <div class="cover-img" style="background-image: url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=200&q=70')"></div>
+            <div class="cover-img" style="background-image: url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=200&q=70')"></div>
+          </div>
+          <div class="featured-ribbon">最近事件</div>
+          <div class="card-cover-badge">84 张</div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">2025年3月 · 日本京都</div>
+          <div class="card-title">三月的京都，还有樱花未开</div>
+          <div class="card-cast">
+            <div class="avatar" style="background:#EDE0D0;color:#7A6858;">我</div>
+            <div class="avatar" style="background:#D4E8D0;color:#3B6D11;">小林</div>
+            <div class="avatar" style="background:#D0DDE8;color:#185FA5;">老王</div>
+            <span class="cast-label">+ 1 人</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="event-card" onclick="showPage('detail')">
+        <div class="card-cover" style="height:140px;">
+          <div class="cover-img" style="height:100%;background-image:url('https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=400&q=80');background-size:cover;background-position:center;"></div>
+          <div class="card-cover-badge">31 张</div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">2025年2月 · 上海</div>
+          <div class="card-title">外婆家的年夜饭</div>
+          <div class="card-cast">
+            <div class="avatar" style="background:#FAEEDA;color:#854F0B;">外婆</div>
+            <div class="avatar" style="background:#EDE0D0;color:#7A6858;">我</div>
+            <span class="cast-label">全家福</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <span class="year-chip" style="display:block;margin-top:18px;">2024</span>
+    <div class="cards-grid" style="margin-bottom:80px;">
+      <div class="event-card" onclick="showPage('detail')">
+        <div class="card-cover" style="height:140px;">
+          <div class="cover-img" style="height:100%;background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80');background-size:cover;background-position:center;"></div>
+          <div class="card-cover-badge">127 张</div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">2024年8月 · 云南大理</div>
+          <div class="card-title">苍山下的慢时光</div>
+          <div class="card-cast">
+            <div class="avatar" style="background:#EDE0D0;color:#7A6858;">我</div>
+            <div class="avatar" style="background:#F4C0D1;color:#993556;">小美</div>
+            <span class="cast-label">2 人</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL PAGE -->
+  <div class="page" id="page-detail">
+    <div class="detail-hero">
+      <div class="detail-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=600&q=80')"></div>
+      <button class="detail-back" onclick="showPage('library')">←</button>
+      <div class="detail-overlay">
+        <div class="detail-date">2025年3月14日–18日 · 日本京都</div>
+        <div class="detail-title">三月的京都，还有樱花未开</div>
+      </div>
+    </div>
+
+    <div class="detail-body">
+
+      <div class="cast-section">
+        <div class="cast-section-label">参与成员</div>
+        <div class="cast-row">
+          <div class="cast-person">
+            <div class="cast-avatar-lg" style="background:#EDE0D0;color:#7A6858;">我</div>
+            <div class="cast-name">我</div>
+          </div>
+          <div class="cast-person">
+            <div class="cast-avatar-lg" style="background:#D4E8D0;color:#3B6D11;">小</div>
+            <div class="cast-name">小林</div>
+          </div>
+          <div class="cast-person">
+            <div class="cast-avatar-lg" style="background:#D0DDE8;color:#185FA5;">王</div>
+            <div class="cast-name">老王</div>
+          </div>
+          <div class="cast-person">
+            <div class="cast-avatar-lg" style="background:#F4C0D1;color:#993556;">陈</div>
+            <div class="cast-name">小陈</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="photos-section">
+        <div class="photos-label-row">
+          <span class="photos-label" id="photos-count-label">照片 · 84 张</span>
+          <button class="photos-edit-btn" id="photos-edit-toggle" onclick="toggleEditMode()">编辑</button>
+        </div>
+        <div class="photos-mosaic" id="photos-mosaic">
+          <div class="photo-thumb" style="background-image:url('https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=300&q=75');min-height:120px;">
+            <div class="photo-del" onclick="deletePhoto(this)">✕</div>
+          </div>
+          <div class="photo-thumb" style="background-image:url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=200&q=70');">
+            <div class="photo-del" onclick="deletePhoto(this)">✕</div>
+          </div>
+          <div class="photo-thumb" style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=200&q=70');">
+            <div class="photo-del" onclick="deletePhoto(this)">✕</div>
+          </div>
+          <div class="photo-thumb" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=200&q=70');">
+            <div class="photo-del" onclick="deletePhoto(this)">✕</div>
+          </div>
+          <div class="photo-thumb photo-more" id="photo-more-cell">+79</div>
+        </div>
+        <button class="add-photo-btn" onclick="openPicker()">＋ 从全部照片中添加</button>
+      </div>
+
+      <button class="scrapbook-btn" onclick="showPage('editor')">
+        ✦ 一键成册，创作手账
+      </button>
+      <div class="export-row">
+        <button class="export-btn">导出长图</button>
+        <button class="export-btn">分享链接</button>
+        <button class="export-btn">打印 PDF</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EDITOR PAGE -->
+  <div class="page" id="page-editor">
+    <div class="editor-header">
+      <button class="editor-back" onclick="showPage('detail')">←</button>
+      <div class="editor-title">手账编辑器</div>
+      <button class="editor-save">保存</button>
+    </div>
+
+    <div class="templates-row">
+      <div class="template-chip active" onclick="selectTemplate(this,'film')">胶卷风</div>
+      <div class="template-chip" onclick="selectTemplate(this,'journal')">日记本</div>
+      <div class="template-chip" onclick="selectTemplate(this,'polaroid')">拍立得</div>
+      <div class="template-chip" onclick="selectTemplate(this,'minimal')">极简白</div>
+    </div>
+
+    <div class="canvas-preview" id="canvas-area">
+      <!-- filled by JS -->
+    </div>
+    <div class="canvas-hint">点击预览区域即可编辑元素</div>
+  </div>
+
+  <!-- ALL PHOTOS PAGE -->
+  <div class="page" id="page-all-photos">
+    <div class="subpage-header">
+      <button class="subpage-back" onclick="showPage('library')">←</button>
+      <div class="subpage-title">全部照片</div>
+      <span class="subpage-count">2,847 张</span>
+    </div>
+    <div class="photos-grid">
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=200&q=70')"></div>
+      <div class="photos-grid-item" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=200&q=70')"></div>
+    </div>
+  </div>
+
+  <!-- ALL EVENTS PAGE -->
+  <div class="page" id="page-all-events">
+    <div class="subpage-header">
+      <button class="subpage-back" onclick="showPage('library')">←</button>
+      <div class="subpage-title">全部事件</div>
+      <span class="subpage-count">47 个</span>
+    </div>
+    <div class="events-list">
+      <div class="event-row" onclick="showPage('detail')">
+        <div class="event-row-thumb" style="background-image:url('https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=120&q=70')"></div>
+        <div class="event-row-info">
+          <div class="event-row-title">三月的京都，还有樱花未开</div>
+          <div class="event-row-meta">2025年3月 · 日本京都</div>
+        </div>
+        <div class="event-row-count">84 张</div>
+      </div>
+      <div class="event-row" onclick="showPage('detail')">
+        <div class="event-row-thumb" style="background-image:url('https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=120&q=70')"></div>
+        <div class="event-row-info">
+          <div class="event-row-title">外婆家的年夜饭</div>
+          <div class="event-row-meta">2025年2月 · 上海</div>
+        </div>
+        <div class="event-row-count">31 张</div>
+      </div>
+      <div class="event-row" onclick="showPage('detail')">
+        <div class="event-row-thumb" style="background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=120&q=70')"></div>
+        <div class="event-row-info">
+          <div class="event-row-title">苍山下的慢时光</div>
+          <div class="event-row-meta">2024年8月 · 云南大理</div>
+        </div>
+        <div class="event-row-count">127 张</div>
+      </div>
+      <div class="event-row" onclick="showPage('detail')">
+        <div class="event-row-thumb" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=120&q=70')"></div>
+        <div class="event-row-info">
+          <div class="event-row-title">东京的第一个傍晚</div>
+          <div class="event-row-meta">2024年5月 · 日本东京</div>
+        </div>
+        <div class="event-row-count">56 张</div>
+      </div>
+      <div class="event-row" onclick="showPage('detail')">
+        <div class="event-row-thumb" style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=120&q=70')"></div>
+        <div class="event-row-info">
+          <div class="event-row-title">毕业典礼那天</div>
+          <div class="event-row-meta">2024年6月 · 北京</div>
+        </div>
+        <div class="event-row-count">203 张</div>
+      </div>
+      <div class="event-row" onclick="showPage('detail')">
+        <div class="event-row-thumb" style="background-image:url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=120&q=70')"></div>
+        <div class="event-row-info">
+          <div class="event-row-title">平遥古城的一天</div>
+          <div class="event-row-meta">2023年10月 · 山西平遥</div>
+        </div>
+        <div class="event-row-count">91 张</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL JOURNALS PAGE -->
+  <div class="page" id="page-all-journals">
+    <div class="subpage-header">
+      <button class="subpage-back" onclick="showPage('library')">←</button>
+      <div class="subpage-title">全部手账</div>
+      <span class="subpage-count">6 本</span>
+    </div>
+    <div class="journals-grid">
+      <div class="journal-card" onclick="openJournal('film','三月的京都')">
+        <div class="journal-card-cover" style="background-image:url('https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=300&q=70')">
+          <span class="journal-card-style">胶卷风</span>
+        </div>
+        <div class="journal-card-body">
+          <div class="journal-card-title">三月的京都</div>
+          <div class="journal-card-meta">2025年3月 · 8页</div>
+        </div>
+      </div>
+      <div class="journal-card" onclick="openJournal('journal','大理的慢时光')">
+        <div class="journal-card-cover" style="background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&q=70')">
+          <span class="journal-card-style">日记本</span>
+        </div>
+        <div class="journal-card-body">
+          <div class="journal-card-title">大理的慢时光</div>
+          <div class="journal-card-meta">2024年8月 · 12页</div>
+        </div>
+      </div>
+      <div class="journal-card" onclick="openJournal('polaroid','毕业那年夏天')">
+        <div class="journal-card-cover" style="background-image:url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=300&q=70')">
+          <span class="journal-card-style">拍立得</span>
+        </div>
+        <div class="journal-card-body">
+          <div class="journal-card-title">毕业那年夏天</div>
+          <div class="journal-card-meta">2024年6月 · 6页</div>
+        </div>
+      </div>
+      <div class="journal-card" onclick="openJournal('minimal','东京初夏')">
+        <div class="journal-card-cover" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=300&q=70')">
+          <span class="journal-card-style">极简白</span>
+        </div>
+        <div class="journal-card-body">
+          <div class="journal-card-title">东京初夏</div>
+          <div class="journal-card-meta">2024年5月 · 5页</div>
+        </div>
+      </div>
+      <div class="journal-card" onclick="openJournal('journal','年夜饭记录册')">
+        <div class="journal-card-cover" style="background-image:url('https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=300&q=70')">
+          <span class="journal-card-style">日记本</span>
+        </div>
+        <div class="journal-card-body">
+          <div class="journal-card-title">年夜饭记录册</div>
+          <div class="journal-card-meta">2025年2月 · 4页</div>
+        </div>
+      </div>
+      <div class="journal-card" onclick="openJournal('film','平遥古城行')">
+        <div class="journal-card-cover" style="background-image:url('https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=300&q=70')">
+          <span class="journal-card-style">胶卷风</span>
+        </div>
+        <div class="journal-card-body">
+          <div class="journal-card-title">平遥古城行</div>
+          <div class="journal-card-meta">2023年10月 · 7页</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOURNAL PREVIEW PAGE （翻页册 or 长图，根据模板类型自动切换） -->
+  <div class="page" id="page-journal-preview">
+    <div class="preview-header">
+      <button class="preview-back" onclick="showPage('all-journals')">←</button>
+      <div class="preview-title" id="preview-title">三月的京都</div>
+      <button class="preview-edit-btn" onclick="openJournalEditor()">编辑</button>
+    </div>
+    <!-- 翻页册模式（胶卷风 / 拍立得） -->
+    <div id="book-mode">
+      <div class="book-viewport">
+        <div class="book-pages" id="book-pages"></div>
+      </div>
+      <div class="book-nav">
+        <button class="book-nav-btn" id="book-prev" onclick="bookTurn(-1)">‹</button>
+        <div class="book-dots" id="book-dots"></div>
+        <button class="book-nav-btn" id="book-next" onclick="bookTurn(1)">›</button>
+      </div>
+    </div>
+    <!-- 长图滚动模式（日记本 / 极简白） -->
+    <div id="scroll-mode" style="display:none;">
+      <div class="scroll-preview" id="scroll-pages"></div>
+    </div>
+  </div>
+
+  <!-- JOURNAL EDITOR PAGE （单页编辑器，点击元素可替换） -->
+  <div class="page" id="page-journal-editor">
+    <div class="editor-header">
+      <button class="editor-back" onclick="showPage('journal-preview')">←</button>
+      <div class="editor-title" id="editor-journal-title">编辑手账</div>
+      <button class="editor-save" onclick="saveAndBack()">保存</button>
+    </div>
+    <div class="templates-row" id="editor-templates-row">
+      <div class="template-chip active" onclick="editorSwitchTemplate(this,'film')">胶卷风</div>
+      <div class="template-chip" onclick="editorSwitchTemplate(this,'journal')">日记本</div>
+      <div class="template-chip" onclick="editorSwitchTemplate(this,'polaroid')">拍立得</div>
+      <div class="template-chip" onclick="editorSwitchTemplate(this,'minimal')">极简白</div>
+    </div>
+    <div class="canvas-preview" id="editor-canvas"></div>
+    <div class="canvas-hint">点击任意元素可替换图片或修改文字</div>
+    <!-- 元素操作浮层 -->
+    <div class="el-toolbar" id="el-toolbar">
+      <button class="el-toolbar-btn" onclick="replaceImage()">🖼 换图</button>
+      <div class="el-toolbar-sep"></div>
+      <button class="el-toolbar-btn" onclick="editText()">✏️ 改文字</button>
+      <div class="el-toolbar-sep"></div>
+      <button class="el-toolbar-btn" onclick="dismissToolbar()">✕</button>
+    </div>
+  </div>
+
+  <!-- 照片选择器弹层 -->
+  <div class="picker-overlay" id="picker-overlay">
+    <div class="picker-sheet">
+      <div class="picker-header">
+        <div class="picker-title">选择照片</div>
+        <button class="picker-confirm" onclick="confirmPicker()">完成添加</button>
+      </div>
+      <div class="picker-grid" id="picker-grid"></div>
+      <button class="picker-cancel" onclick="closePicker()">取消</button>
+    </div>
+  </div>
+
+  <!-- 文字编辑弹层 -->
+  <div class="picker-overlay" id="text-overlay">
+    <div class="picker-sheet" style="padding-bottom:20px;">
+      <div class="picker-header">
+        <div class="picker-title">修改文字</div>
+        <button class="picker-confirm" onclick="confirmTextEdit()">完成</button>
+      </div>
+      <div style="padding:16px 20px;">
+        <textarea id="text-input" style="width:100%;height:100px;border:0.5px solid var(--warm-tan);border-radius:var(--radius-sm);padding:10px;font-family:var(--font-sans);font-size:14px;resize:none;background:white;color:var(--ink);"></textarea>
+      </div>
+      <button class="picker-cancel" onclick="closeTextEdit()">取消</button>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="bottom-btn active" id="btn-library" onclick="showPage('library')">
+      <span class="bottom-icon">◫</span>
+      <span class="bottom-label">时光</span>
+    </button>
+    <button class="bottom-btn" id="btn-search" onclick="">
+      <span class="bottom-icon">◎</span>
+      <span class="bottom-label">搜索</span>
+    </button>
+    <button class="bottom-btn" id="btn-editor" onclick="showPage('all-journals')">
+      <span class="bottom-icon">✦</span>
+      <span class="bottom-label">创作</span>
+    </button>
+    <button class="bottom-btn" id="btn-me" onclick="">
+      <span class="bottom-icon">◉</span>
+      <span class="bottom-label">我的</span>
+    </button>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+// 数据
+// ─────────────────────────────────────────
+const allPhotos = [
+  'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=300&q=70',
+  'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=300&q=70',
+  'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=300&q=70',
+  'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=300&q=70',
+  'https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=300&q=70',
+  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&q=70',
+  'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=300&q=70',
+  'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=300&q=70',
+  'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=300&q=70',
+  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&q=70',
+  'https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=300&q=70',
+  'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=300&q=70',
+];
+
+// 每本手账的多页内容（index 0 = 封面）
+const journalPages = {
+  film: [
+    { img:'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=400&q=80', caption:'三月的京都，还有樱花未开' },
+    { img:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=400&q=80', caption:'嵐山竹林的午后' },
+    { img:'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=400&q=80', caption:'金阁寺，下午三点' },
+  ],
+  journal: [
+    { img:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&q=80', text:'三月的京都比想象中更冷。冷风裹着薄薄的雨意，让人猝不及防。但正因如此，街道上的行人寥寥，反而多了一分私人的从容感……' },
+    { img:'https://images.unsplash.com/photo-1467803738586-46b7eb7b16a1?w=300&q=80', text:'第二天我们去了伏见稻荷。千本鸟居在细雨中更显庄严，游客比预想的少，安静得像一场梦……' },
+    { img:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=300&q=80', text:'最后一晚，在河原町吃了一碗拉面。简单的汤底，却让所有疲惫都化开了。' },
+  ],
+  polaroid: [
+    { img1:'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=300&q=80', lbl1:'金阁寺，下午三点', img2:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=300&q=80', lbl2:'嵐山竹林' },
+    { img1:'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?w=300&q=80', lbl1:'伏见稻荷大社', img2:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=300&q=80', lbl2:'清水寺夜景' },
+  ],
+  minimal: [
+    { img:'https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=400&q=80', sub:'Kyoto · March 2025', title:'三月的\n京都', note:'还有樱花未开，就已经美得让人无法言语。' },
+    { img:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80', sub:'Day 2', title:'行走的\n雨天', note:'细雨让城市多了一层朦胧，脚步慢下来，才看见平日忽略的美。' },
+  ],
+};
+
+// 翻页书模式的模板（胶卷/拍立得）
+const isBookMode = t => t === 'film' || t === 'polaroid';
+
+let currentJournalType = 'film';
+let currentJournalTitle = '三月的京都';
+let currentBookPage = 0;
+
+// ─────────────────────────────────────────
+// 页面导航
+// ─────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const navMap = {
+    'library':'library',
+    'all-photos':'library','all-events':'all-events',
+    'all-journals':'all-journals','journal-preview':'all-journals','journal-editor':'all-journals',
+    'detail':'all-events','editor':'all-journals'
+  };
+  const tab = document.querySelector(`.nav-tab[data-page="${navMap[name]||name}"]`);
+  if(tab) tab.classList.add('active');
+
+  document.querySelectorAll('.bottom-btn').forEach(b => b.classList.remove('active'));
+  const bmap = {
+    library:'btn-library','all-photos':'btn-library',
+    'all-events':'btn-library','detail':'btn-library',
+    'all-journals':'btn-editor','journal-preview':'btn-editor','journal-editor':'btn-editor','editor':'btn-editor'
+  };
+  if(bmap[name]) document.getElementById(bmap[name]).classList.add('active');
+
+  if(name !== 'detail' && isEditMode) exitEditMode();
+  dismissToolbar();
+}
+
+// ─────────────────────────────────────────
+// 手账：打开预览
+// ─────────────────────────────────────────
+function openJournal(type, title) {
+  currentJournalType = type;
+  currentJournalTitle = title;
+  currentBookPage = 0;
+
+  document.getElementById('preview-title').textContent = title;
+
+  const pages = journalPages[type] || journalPages.film;
+  const bookMode = document.getElementById('book-mode');
+  const scrollMode = document.getElementById('scroll-mode');
+
+  if(isBookMode(type)) {
+    bookMode.style.display = '';
+    scrollMode.style.display = 'none';
+    buildBookPages(type, pages);
+  } else {
+    bookMode.style.display = 'none';
+    scrollMode.style.display = '';
+    buildScrollPages(type, pages);
+  }
+  showPage('journal-preview');
+}
+
+function buildBookPages(type, pages) {
+  const container = document.getElementById('book-pages');
+  const dots = document.getElementById('book-dots');
+  container.innerHTML = '';
+  dots.innerHTML = '';
+
+  pages.forEach((p, i) => {
+    const page = document.createElement('div');
+    page.className = 'book-page';
+    if(type === 'film') {
+      const holes = Array(6).fill('<div class="film-hole"></div>').join('');
+      page.innerHTML = `<div class="template-film">
+        <div class="film-hole-row">${holes}</div>
+        <div class="film-photo" style="background-image:url('${p.img}')"></div>
+        <div class="film-hole-row" style="margin-top:3px;">${holes}</div>
+        <div class="film-caption">${p.caption}</div>
+        <div class="film-hole-row" style="margin-top:3px;">${holes}</div>
+      </div>`;
+    } else {
+      page.innerHTML = `<div class="template-polaroid">
+        <div class="polaroid-frame">
+          <div class="polaroid-img" style="background-image:url('${p.img1}')"></div>
+          <div class="polaroid-label">${p.lbl1}</div>
+        </div>
+        <div class="polaroid-frame">
+          <div class="polaroid-img" style="background-image:url('${p.img2}')"></div>
+          <div class="polaroid-label">${p.lbl2}</div>
+        </div>
+      </div>`;
+    }
+    container.appendChild(page);
+
+    const dot = document.createElement('div');
+    dot.className = 'book-dot' + (i===0?' active':'');
+    dots.appendChild(dot);
+  });
+
+  updateBookNav(pages.length);
+}
+
+function buildScrollPages(type, pages) {
+  const container = document.getElementById('scroll-pages');
+  container.innerHTML = '';
+  pages.forEach((p, i) => {
+    const wrap = document.createElement('div');
+    const num = document.createElement('div');
+    num.className = 'scroll-page-num';
+    num.textContent = `第 ${i+1} 页`;
+    const page = document.createElement('div');
+    page.className = 'scroll-page';
+    page.onclick = () => openJournalEditor(i);
+
+    if(type === 'journal') {
+      page.innerHTML = `<div class="template-journal">
+        <div class="journal-date">March 2025 · Kyoto</div>
+        <div class="journal-title">还有樱花未开</div>
+        <div style="overflow:hidden;">
+          <div class="journal-img" style="background-image:url('${p.img}')"></div>
+          <div class="journal-text">🌸 ${p.text}</div>
+        </div>
+      </div>`;
+    } else {
+      page.innerHTML = `<div style="background:white;padding:32px 24px;min-height:280px;">
+        <div style="font-size:10px;color:#B8A090;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">${p.sub}</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:26px;color:#2C2420;margin-bottom:18px;line-height:1.1;">${p.title.replace('\n','<br>')}</div>
+        <div style="width:100%;height:160px;background-image:url('${p.img}');background-size:cover;background-position:center;border-radius:8px;margin-bottom:14px;"></div>
+        <div style="font-size:12px;color:#7A6858;line-height:1.9;">${p.note}</div>
+      </div>`;
+    }
+    wrap.appendChild(num);
+    wrap.appendChild(page);
+    container.appendChild(wrap);
+  });
+}
+
+function bookTurn(dir) {
+  const pages = journalPages[currentJournalType];
+  const newPage = currentBookPage + dir;
+  if(newPage < 0 || newPage >= pages.length) return;
+  currentBookPage = newPage;
+  document.getElementById('book-pages').style.transform = `translateX(-${currentBookPage * 100}%)`;
+  document.querySelectorAll('.book-dot').forEach((d,i) => d.classList.toggle('active', i===currentBookPage));
+  updateBookNav(pages.length);
+}
+
+function updateBookNav(total) {
+  document.getElementById('book-prev').disabled = currentBookPage === 0;
+  document.getElementById('book-next').disabled = currentBookPage === total - 1;
+}
+
+// ─────────────────────────────────────────
+// 手账：进入编辑器
+// ─────────────────────────────────────────
+function openJournalEditor(pageIndex) {
+  document.getElementById('editor-journal-title').textContent = currentJournalTitle;
+  // 设置对应模板chip active
+  document.querySelectorAll('#editor-templates-row .template-chip').forEach(c => {
+    c.classList.toggle('active', c.textContent.trim() === templateLabel(currentJournalType));
+  });
+  renderEditorCanvas(currentJournalType);
+  showPage('journal-editor');
+}
+
+function templateLabel(t) {
+  return {film:'胶卷风',journal:'日记本',polaroid:'拍立得',minimal:'极简白'}[t] || '胶卷风';
+}
+
+function editorSwitchTemplate(el, name) {
+  document.querySelectorAll('#editor-templates-row .template-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  currentJournalType = name;
+  renderEditorCanvas(name);
+  dismissToolbar();
+}
+
+function renderEditorCanvas(type) {
+  const p = (journalPages[type]||journalPages.film)[0];
+  const canvas = document.getElementById('editor-canvas');
+  let html = '';
+  const holes = Array(6).fill('<div class="film-hole"></div>').join('');
+  if(type==='film') {
+    html = `<div class="template-film">
+      <div class="film-hole-row">${holes}</div>
+      <div class="film-photo editable-el" data-kind="img" style="background-image:url('${p.img}')" onclick="selectEl(this)"></div>
+      <div class="film-hole-row" style="margin-top:3px;">${holes}</div>
+      <div class="film-caption editable-el" data-kind="text" onclick="selectEl(this)">${p.caption}</div>
+      <div class="film-hole-row" style="margin-top:3px;">${holes}</div>
+    </div>`;
+  } else if(type==='journal') {
+    html = `<div class="template-journal">
+      <div class="journal-date editable-el" data-kind="text" onclick="selectEl(this)">March 2025 · Kyoto, Japan</div>
+      <div class="journal-title editable-el" data-kind="text" onclick="selectEl(this)">还有樱花未开</div>
+      <div style="overflow:hidden;">
+        <div class="journal-img editable-el" data-kind="img" style="background-image:url('${p.img}')" onclick="selectEl(this)"></div>
+        <div class="journal-text editable-el" data-kind="text" onclick="selectEl(this)">🌸 ${p.text}</div>
+      </div>
+    </div>`;
+  } else if(type==='polaroid') {
+    html = `<div class="template-polaroid">
+      <div class="polaroid-frame">
+        <div class="polaroid-img editable-el" data-kind="img" style="background-image:url('${p.img1}')" onclick="selectEl(this)"></div>
+        <div class="polaroid-label editable-el" data-kind="text" onclick="selectEl(this)">${p.lbl1}</div>
+      </div>
+      <div class="polaroid-frame">
+        <div class="polaroid-img editable-el" data-kind="img" style="background-image:url('${p.img2}')" onclick="selectEl(this)"></div>
+        <div class="polaroid-label editable-el" data-kind="text" onclick="selectEl(this)">${p.lbl2}</div>
+      </div>
+    </div>`;
+  } else {
+    html = `<div style="background:white;padding:32px 24px;min-height:320px;">
+      <div class="editable-el" data-kind="text" onclick="selectEl(this)" style="font-size:10px;color:#B8A090;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">${p.sub}</div>
+      <div class="editable-el" data-kind="text" onclick="selectEl(this)" style="font-family:'DM Serif Display',serif;font-size:28px;color:#2C2420;margin-bottom:20px;line-height:1.1;">${p.title.replace('\n','<br>')}</div>
+      <div class="editable-el" data-kind="img" onclick="selectEl(this)" style="width:100%;height:180px;background-image:url('${p.img}');background-size:cover;background-position:center;border-radius:8px;margin-bottom:16px;"></div>
+      <div class="editable-el" data-kind="text" onclick="selectEl(this)" style="font-size:12px;color:#7A6858;line-height:1.9;">${p.note}</div>
+    </div>`;
+  }
+  canvas.innerHTML = html;
+}
+
+// ─────────────────────────────────────────
+// 元素编辑交互
+// ─────────────────────────────────────────
+let selectedEl = null;
+
+function selectEl(el) {
+  document.querySelectorAll('.editable-el').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedEl = el;
+  const toolbar = document.getElementById('el-toolbar');
+  toolbar.classList.add('visible');
+  // 根据元素类型显示/隐藏按钮
+  const isImg = el.dataset.kind === 'img';
+  toolbar.querySelector('[onclick="replaceImage()"]').style.display = isImg ? '' : 'none';
+  toolbar.querySelector('[onclick="editText()"]').style.display = isImg ? 'none' : '';
+  toolbar.querySelector('.el-toolbar-sep:first-of-type').style.display = isImg ? 'none' : '';
+}
+
+function dismissToolbar() {
+  document.querySelectorAll('.editable-el').forEach(e=>e.classList.remove('selected'));
+  selectedEl = null;
+  document.getElementById('el-toolbar').classList.remove('visible');
+}
+
+// 换图 — 复用照片选择器，但换图模式
+let pickerMode = 'event'; // 'event' or 'replace'
+let pickerSelected = new Set();
+
+function replaceImage() {
+  pickerMode = 'replace';
+  pickerSelected.clear();
+  const grid = document.getElementById('picker-grid');
+  grid.innerHTML = '';
+  allPhotos.forEach((url, i) => {
+    const item = document.createElement('div');
+    item.className = 'picker-item';
+    item.style.backgroundImage = `url('${url}')`;
+    item.onclick = () => {
+      grid.querySelectorAll('.picker-item').forEach(x=>x.classList.remove('selected'));
+      item.classList.add('selected');
+      pickerSelected.clear();
+      pickerSelected.add(i);
+    };
+    grid.appendChild(item);
+  });
+  document.getElementById('picker-overlay').classList.add('open');
+}
+
+function editText() {
+  if(!selectedEl) return;
+  document.getElementById('text-input').value = selectedEl.textContent.trim();
+  document.getElementById('text-overlay').classList.add('open');
+}
+
+function confirmTextEdit() {
+  if(selectedEl) {
+    selectedEl.textContent = document.getElementById('text-input').value;
+  }
+  closeTextEdit();
+  dismissToolbar();
+}
+function closeTextEdit() { document.getElementById('text-overlay').classList.remove('open'); }
+
+function saveAndBack() {
+  dismissToolbar();
+  showPage('journal-preview');
+}
+
+// ─────────────────────────────────────────
+// 事件详情页照片编辑
+// ─────────────────────────────────────────
+let isEditMode = false;
+let photoCount = 84;
+
+function toggleEditMode() { isEditMode ? exitEditMode() : enterEditMode(); }
+function enterEditMode() {
+  isEditMode = true;
+  document.getElementById('photos-mosaic').classList.add('edit-mode');
+  document.querySelector('.add-photo-btn').style.display = 'block';
+  document.getElementById('photos-edit-toggle').textContent = '完成';
+  const more = document.getElementById('photo-more-cell');
+  if(more) more.style.display = 'none';
+}
+function exitEditMode() {
+  isEditMode = false;
+  document.getElementById('photos-mosaic').classList.remove('edit-mode');
+  document.querySelector('.add-photo-btn').style.display = 'none';
+  document.getElementById('photos-edit-toggle').textContent = '编辑';
+  refreshMoreCell();
+}
+function deletePhoto(delBtn) {
+  const thumb = delBtn.parentElement;
+  const mosaic = document.getElementById('photos-mosaic');
+  if(mosaic.querySelectorAll('.photo-thumb:not(.photo-more)').length <= 1) return;
+  thumb.style.transition = 'opacity 0.2s, transform 0.2s';
+  thumb.style.opacity = '0'; thumb.style.transform = 'scale(0.85)';
+  setTimeout(() => { thumb.remove(); photoCount = Math.max(0, photoCount-1); updatePhotoCountLabel(); refreshMoreCell(); }, 200);
+}
+function refreshMoreCell() {
+  const mosaic = document.getElementById('photos-mosaic');
+  const vis = mosaic.querySelectorAll('.photo-thumb:not(.photo-more)').length;
+  let more = document.getElementById('photo-more-cell');
+  const rem = photoCount - vis;
+  if(rem > 0 && !isEditMode) {
+    if(!more) { more = document.createElement('div'); more.className='photo-thumb photo-more'; more.id='photo-more-cell'; mosaic.appendChild(more); }
+    more.textContent = '+'+rem; more.style.display='';
+  } else if(more) { more.style.display='none'; }
+}
+function updatePhotoCountLabel() { document.getElementById('photos-count-label').textContent = '照片 · '+photoCount+' 张'; }
+
+// ─────────────────────────────────────────
+// 照片选择器（事件添加 + 编辑器换图共用）
+// ─────────────────────────────────────────
+function openPicker() {
+  pickerMode = 'event';
+  pickerSelected.clear();
+  const grid = document.getElementById('picker-grid');
+  grid.innerHTML = '';
+  const existing = new Set([...document.querySelectorAll('#photos-mosaic .photo-thumb:not(.photo-more)')].map(el=>el.style.backgroundImage.replace(/url\(['"]?|['"]?\)/g,'')));
+  allPhotos.forEach((url, i) => {
+    const item = document.createElement('div');
+    item.className = 'picker-item' + (existing.has(url)?' selected':'');
+    item.style.backgroundImage = `url('${url}')`;
+    if(existing.has(url)) { item.style.pointerEvents='none'; item.style.opacity='0.4'; }
+    item.onclick = () => { if(pickerSelected.has(i)){pickerSelected.delete(i);item.classList.remove('selected');}else{pickerSelected.add(i);item.classList.add('selected');} };
+    grid.appendChild(item);
+  });
+  document.getElementById('picker-overlay').classList.add('open');
+}
+function closePicker() { document.getElementById('picker-overlay').classList.remove('open'); }
+function confirmPicker() {
+  if(pickerMode === 'replace') {
+    if(selectedEl && pickerSelected.size > 0) {
+      const url = allPhotos[[...pickerSelected][0]];
+      selectedEl.style.backgroundImage = `url('${url}')`;
+    }
+    closePicker(); dismissToolbar(); return;
+  }
+  // event add mode
+  const mosaic = document.getElementById('photos-mosaic');
+  const moreCell = document.getElementById('photo-more-cell');
+  pickerSelected.forEach(i => {
+    const url = allPhotos[i];
+    const thumb = document.createElement('div');
+    thumb.className = 'photo-thumb'; thumb.style.backgroundImage=`url('${url}')`; thumb.style.opacity='0'; thumb.style.transition='opacity 0.3s';
+    const del = document.createElement('div'); del.className='photo-del'; del.textContent='✕'; del.onclick=()=>deletePhoto(del);
+    thumb.appendChild(del);
+    if(moreCell) mosaic.insertBefore(thumb, moreCell); else mosaic.appendChild(thumb);
+    setTimeout(()=>thumb.style.opacity='1', 30);
+    photoCount++;
+  });
+  updatePhotoCountLabel(); refreshMoreCell(); closePicker();
+}
+</script>
